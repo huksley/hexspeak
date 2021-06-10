@@ -16,7 +16,7 @@
     "nanoid": "^3.1.18"
   },
   "devDependencies": {
-    "serverless": "^1.35.1",
+    "serverless": "^2.24.0",
     "serverless-apigw-binary": "^0.4.4",
     "serverless-domain-manager": "^5.1.0",
     "serverless-s3-block-public-access": "^1.0.1"
