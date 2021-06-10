@@ -1,0 +1,48 @@
+service: hexspeak
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: eu-west-1
+  stage: dev
+  apiGateway:
+    shouldStartNameWithService: true
+  logRetentionInDays: 30
+  # optional, in MB, default is 1024, min is 128
+  memorySize: 128
+  # optional, in seconds, default is 6
+  timeout: 600
+  # optional, default is true
+  versionFunctions: false
+
+plugins:
+  - serverless-s3-block-public-access
+  - serverless-domain-manager
+
+package:
+  exclude:
+    - "README.md"
+    - ".editorconfig"
+    - ".git/**"
+    - ".vscode/**"
+    - ".gitignore"
+    - "node_modules/aws-lambda/**"
+    - "node_modules/aws-sdk/**"
+
+custom:
+  customDomains:
+    # http + regional is a cheaper option
+    # regional does not support HTTP->HTTPS redirection
+    # http does not support regional endpoints
+    - rest:
+        domainName: hexspeak.ruslan.org
+        createRoute53Record: true
+        endpointType: edge
+
+functions:
+  api:
+    handler: src/index.handler
+    description: ${env:GIT_TAGS, 'dev'}
+    events:
+      - http: GET /
+      - http: "ANY /{proxy+}"
