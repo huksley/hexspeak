@@ -42,7 +42,6 @@ custom:
 functions:
   api:
     handler: src/index.handler
-    description: ${env:GIT_TAGS, 'dev'}
     events:
       - http: GET /
       - http: "ANY /{proxy+}"
